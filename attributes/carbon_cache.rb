@@ -22,9 +22,53 @@ default['graphite']['carbon']['whisper_autoflush'] = "False"
 
 default['graphite']['storage_schemas'] = [
   {
+    'name' => 'stats', 
+    'pattern' => '^stats\..*', 
+    'retentions' => '10s:6h,1min:7d,10min:5y'
+  },
+  {
     'name' => 'catchall', 
     'pattern' => '^.*', 
     'retentions' => '60:100800,900:63000'
+  }
+]
+
+default['graphite']['storage_aggregation'] = [
+  {
+    'name' => 'min', 
+    'pattern' => '^stats\..*\.lower', 
+    'xFilesFactor' => 0.1,
+    'aggregationMethod' => 'min'
+  },
+  {
+    'name' => 'max', 
+    'pattern' => '^stats\..*\.upper', 
+    'xFilesFactor' => 0.1,
+    'aggregationMethod' => 'max'
+  },
+  {
+    'name' => 'sum', 
+    'pattern' => '^stats\..*\.sum', 
+    'xFilesFactor' => 0,
+    'aggregationMethod' => 'sum'
+  },
+  {
+    'name' => 'count', 
+    'pattern' => '^stats\..*\.count', 
+    'xFilesFactor' => 0,
+    'aggregationMethod' => 'sum'
+  },
+  {
+    'name' => 'count_legacy', 
+    'pattern' => '^stats_counts\..*', 
+    'xFilesFactor' => 0,
+    'aggregationMethod' => 'sum'
+  },
+  {
+    'name' => 'default', 
+    'pattern' => '.*', 
+    'xFilesFactor' => 0.3,
+    'aggregationMethod' => 'average'
   }
 ]
 
